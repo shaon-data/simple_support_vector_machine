@@ -1,1 +1,4 @@
 Queries for sloving Issues 	
+quadratic programming
+Convex problem
+Convex optimization

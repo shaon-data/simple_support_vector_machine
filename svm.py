@@ -19,7 +19,15 @@ class svm:
 
         ## train
         def fit(self,data):
-            pass
+            self.data = data
+            ## { ||w||: [w,b] }
+            mag = {}
+
+            transforms =  [[1,1],
+                           [-1,1],
+                           [-1,-1],
+                           [1,-1]]
+            
         def predict(self,features):
             # sign(x.w+b)
             classify = np.sign( np.dot(np.array(features),self.w) + self.b )
