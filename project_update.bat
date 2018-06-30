@@ -128,7 +128,7 @@ IF "%command%" == "git" (
 
 	SET /P umes=Commit Message:
 
-	IF [%umes%] == [] (
+	IF [!umes!] == [] (
 		echo empty message - con...
 		SET umes=continuing
 	)
