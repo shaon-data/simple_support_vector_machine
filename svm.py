@@ -2,7 +2,9 @@
 import matplotlib.pyplot as plt
 from matplotlib import style
 import numpy as np
+import math
 style.use('ggplot')
+
 
 plus_class = 1
 minus_class = -1
@@ -11,9 +13,9 @@ minus_class = -1
 class support_vector_machine:
     def __init__(self, visualize=True):
         self.visualize = visualize
-        self.colors = {plus_class:'r',minus_class:'b'}
+        self.colors = {plus_class:'b',minus_class:'y'}
         if self.visualize:
-            self.fig = plt.figure()
+            self.fig = plt.figure("2D Support Vector Machine")
             self.ax = self.fig.add_subplot(1,1,1)
 
     ## train
@@ -110,24 +112,32 @@ class support_vector_machine:
         hyp_x_min = datarange[0]
         hyp_x_max = datarange[1]
 
+        
         ## (w.x+b) = 1
         ## positive support vector hyperplane
         psv1 = hyperplane(hyp_x_min, self.w, self.b, 1)
         psv2 = hyperplane(hyp_x_max, self.w, self.b, 1)
-        self.ax.plot([hyp_x_min,hyp_x_max],[psv1,psv2])
+        self.ax.plot([hyp_x_min,hyp_x_max],[psv1,psv2],'b',label='positive hyperplane')
+        slope = (psv2 - psv1) / (hyp_x_max-hyp_x_min)
+        angle = math.degrees(math.atan(slope)) - 24
+        self.ax.text(hyp_x_min, psv1+1, 'X.w + b >= 0',  rotation=angle)
 
         ## (w.x+b) = -1
         ## positive support vector hyperplane
         nsv1 = hyperplane(hyp_x_min, self.w, self.b, -1)
         nsv2 = hyperplane(hyp_x_max, self.w, self.b, -1)
-        self.ax.plot([hyp_x_min,hyp_x_max],[nsv1,nsv2])
+        self.ax.plot([hyp_x_min,hyp_x_max],[nsv1,nsv2],'y',label='negative hyperplane')
+        self.ax.text(hyp_x_min, nsv1+1, 'X.w + b <= 0',  rotation=angle)
 
         ## (w.x+b) = 0
         ## decision boundary support vector hyperplane
         db1 = hyperplane(hyp_x_min, self.w, self.b, 0)
         db2 = hyperplane(hyp_x_max, self.w, self.b, 0)
-        self.ax.plot([hyp_x_min,hyp_x_max],[db1,db2])
+        self.ax.plot([hyp_x_min,hyp_x_max],[db1,db2],'g--',label='decision boundary')
+        self.ax.text(hyp_x_min, db1+1, 'X.w + b = 0',  rotation=angle)
 
+        self.ax.legend()
+        self.ax.set_title("Terms -> X = all features, w = width, b = bias")
         plt.show()
                 
                 
