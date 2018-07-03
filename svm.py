@@ -73,6 +73,7 @@ class support_vector_machine:
                                 yi=i
                                 if not yi*(np.dot(w_t,xi)+b) >= 1:
                                     found_option = False
+                                    #print(  xi,':',yi*( np.dot(w_t,xi)+b )  )
                                             
                         if found_option:
                             mag[np.linalg.norm(w_t)] = [w_t,b] ## norm - magnitude of a vector
@@ -93,12 +94,12 @@ class support_vector_machine:
     def predict(self,features):
         # sign(x.w+b)
         classify = np.sign( np.dot(np.array(features),self.w) + self.b )
-        if classify != 0 and self.visualization:
-            self.ax.scatter(feature[0],feature[1],s=200,marker='*',c=self.colors[classify])
+        if classify != 0 and self.visualize:
+            self.predict_legend = self.ax.scatter(features[0],features[1],s=200,marker='*',c=self.colors[classify],label='preiction points')
         return classify
         
     def visualize_g(self):
-        [[self.ax.scatter(x[0] , x[1], s=100, color=self.colors[i]) for x in data_dict[i]] for i in data_dict]
+        [[self.ax.scatter(x[0] , x[1], s=100, color=self.colors[i], label='Training points') for x in data_dict[i]] for i in data_dict]
 
         # hyperplane x.w + b
         ## v = x.w + b
@@ -117,26 +118,34 @@ class support_vector_machine:
         ## positive support vector hyperplane
         psv1 = hyperplane(hyp_x_min, self.w, self.b, 1)
         psv2 = hyperplane(hyp_x_max, self.w, self.b, 1)
-        self.ax.plot([hyp_x_min,hyp_x_max],[psv1,psv2],'b',label='positive hyperplane')
+        psv_legend, = self.ax.plot([hyp_x_min,hyp_x_max],[psv1,psv2],'b',label='positive hyperplane')
         slope = (psv2 - psv1) / (hyp_x_max-hyp_x_min)
         angle = math.degrees(math.atan(slope)) - 24
-        self.ax.text(hyp_x_min, psv1+1, 'X.w + b >= 0',  rotation=angle)
+        self.ax.text(hyp_x_min, psv1+1.5, 'X.w + b = 1 line',  rotation=angle)
+        
 
         ## (w.x+b) = -1
-        ## positive support vector hyperplane
+        ## negative support vector hyperplane
         nsv1 = hyperplane(hyp_x_min, self.w, self.b, -1)
         nsv2 = hyperplane(hyp_x_max, self.w, self.b, -1)
-        self.ax.plot([hyp_x_min,hyp_x_max],[nsv1,nsv2],'y',label='negative hyperplane')
-        self.ax.text(hyp_x_min, nsv1+1, 'X.w + b <= 0',  rotation=angle)
-
+        nsv_legend, = self.ax.plot([hyp_x_min,hyp_x_max],[nsv1,nsv2],'y',label='negative hyperplane')
+        self.ax.text(hyp_x_min, nsv1+1.5, 'X.w + b = -1 line',  rotation=angle) # 'X.w + b <= 0'
+        
+        
         ## (w.x+b) = 0
         ## decision boundary support vector hyperplane
         db1 = hyperplane(hyp_x_min, self.w, self.b, 0)
         db2 = hyperplane(hyp_x_max, self.w, self.b, 0)
-        self.ax.plot([hyp_x_min,hyp_x_max],[db1,db2],'g--',label='decision boundary')
-        self.ax.text(hyp_x_min, db1+1, 'X.w + b = 0',  rotation=angle)
+        db_legend, = self.ax.plot([hyp_x_min,hyp_x_max],[db1,db2],'g--',label='decision boundary')
+        self.ax.text(hyp_x_min, db1+1.5, 'X.w + b = 0 line',  rotation=angle)
+        
 
-        self.ax.legend()
+        self.ax.text(hyp_x_min, -.4, 'X.w + b >= 0 region',  rotation=angle, color='red')
+        self.ax.text(hyp_x_min, 4.4, 'X.w + b <= 0 region',  rotation=angle, color='red')
+
+        
+        self.ax.legend(handles=[self.predict_legend,nsv_legend,db_legend,psv_legend])
+        
         self.ax.set_title("Terms -> X = all features, w = width, b = bias")
         plt.show()
                 
@@ -156,4 +165,21 @@ data_dict = {
 
 svm = support_vector_machine()
 svm.fit(data=data_dict)
+
+predict_us = [
+                [0,10],
+                [1,3],
+                [3,4],
+                [3,5],
+                [5,5],
+                [5,6],
+                [6,-5],
+                [5,8]
+             ]
+
+for p in predict_us:
+    svm.predict(p)
+    
+    
+
 svm.visualize_g()
