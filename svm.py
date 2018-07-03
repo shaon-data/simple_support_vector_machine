@@ -90,6 +90,12 @@ class support_vector_machine:
             self.w=opt_choice[0]
             self.b=opt_choice[1]
             latest_optimum = opt_choice[0][0] + step*2
+
+        print('Optimazation steps , Learning points')
+        for i in self.data:
+            for xi in self.data[i]:
+                yi=i
+                print(xi,':',yi*(np.dot(self.w,xi)+self.b))
                     
     def predict(self,features):
         # sign(x.w+b)
