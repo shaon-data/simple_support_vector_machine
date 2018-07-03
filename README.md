@@ -8,3 +8,5 @@ For downloading use
 	Convex Optimization Book: https://web.stanford.edu/~boyd/cvxbook/bv_cvxbook.pdf
 	Sequential Minimal Optimization Book: http://research.microsoft.com/pubs/68391/smo-book.pdf
 	More SMO: http://research.microsoft.com/pubs/69644/tr-98-14.pdf
+## Languages
+	Python3.6.5
