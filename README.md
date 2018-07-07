@@ -14,3 +14,4 @@ For downloading use
 
 ## Explanation
 ![2D Support Vector Machine](https://github.com/ShaonMajumder/simple_support_vector_machine/blob/master/pics/2D_Support_Vector_Machine.png)
+<div align="center">2D Support Vector Machine and Demonstration</div>
